@@ -1,0 +1,167 @@
+import {
+    Wallet,
+    Truck,
+    HeartPulse,
+    MessageSquare,
+    GraduationCap,
+    ShoppingBag,
+    Users,
+    Leaf,
+    Brain,
+} from 'lucide-react';
+
+export const PROJECTS = [
+    {
+        Icon: Wallet,
+        title: { uz: 'Nova Finance', ru: 'Nova Finance', en: 'Nova Finance' },
+        category: { uz: 'Fintech', ru: 'Fintech', en: 'Fintech' },
+        tags: {
+            uz: ['React', 'UI/UX', 'SaaS'],
+            ru: ['React', 'UI/UX', 'SaaS'],
+            en: ['React', 'UI/UX', 'SaaS'],
+        },
+        desc: {
+            uz: "Shaxsiy mablag'larni kuzatish va rejalashtirish uchun fintech panel — real vaqtda hisobotlar bilan.",
+            ru: 'Fintech-панель для отслеживания и планирования личных финансов — с отчётами в реальном времени.',
+            en: 'A fintech panel for tracking and planning personal finances — with real-time reports.',
+        },
+        from: '#2563EB',
+        to: '#22D3EE',
+    },
+    {
+        Icon: Truck,
+        title: { uz: 'Atlas Logistics', ru: 'Atlas Logistics', en: 'Atlas Logistics' },
+        category: { uz: 'Logistika', ru: 'Логистика', en: 'Logistics' },
+        tags: {
+            uz: ['Dashboard', 'Mobile', 'Branding'],
+            ru: ['Dashboard', 'Mobile', 'Branding'],
+            en: ['Dashboard', 'Mobile', 'Branding'],
+        },
+        desc: {
+            uz: "Yuk tashish jarayonini to'liq nazorat qiluvchi logistika platformasi — marshrut va ombor boshqaruvi.",
+            ru: 'Логистическая платформа полного контроля перевозок — управление маршрутами и складом.',
+            en: 'A logistics platform with full control over shipments — route and warehouse management.',
+        },
+        from: '#7C3AED',
+        to: '#EC4899',
+    },
+    {
+        Icon: HeartPulse,
+        title: { uz: 'Vela Health', ru: 'Vela Health', en: 'Vela Health' },
+        category: { uz: "Sog'liqni saqlash", ru: 'Здравоохранение', en: 'Healthcare' },
+        tags: {
+            uz: ['Telemed', 'Dizayn tizimi'],
+            ru: ['Телемедицина', 'Дизайн-система'],
+            en: ['Telemedicine', 'Design System'],
+        },
+        desc: {
+            uz: 'Masofaviy konsultatsiya va shifokorlarni boshqarish tizimi — bemorlar uchun silliq tajriba.',
+            ru: 'Система удалённых консультаций и управления врачами — плавный опыт для пациентов.',
+            en: 'A system for remote consultations and doctor management — a smooth experience for patients.',
+        },
+        from: '#10B981',
+        to: '#06B6D4',
+    },
+    {
+        Icon: MessageSquare,
+        title: { uz: 'Meridian Chat', ru: 'Meridian Chat', en: 'Meridian Chat' },
+        category: { uz: 'Muloqot', ru: 'Общение', en: 'Messaging' },
+        tags: {
+            uz: ['Node.js', 'WebSocket', 'Real-time'],
+            ru: ['Node.js', 'WebSocket', 'Real-time'],
+            en: ['Node.js', 'WebSocket', 'Real-time'],
+        },
+        desc: {
+            uz: 'Real vaqtda ishlaydigan xabar almashish ilovasi — guruh chatlari va shifrlangan yozishmalar.',
+            ru: 'Приложение обмена сообщениями в реальном времени — групповые чаты и шифрованная переписка.',
+            en: 'A real-time messaging app — group chats and encrypted conversations.',
+        },
+        from: '#F59E0B',
+        to: '#EF4444',
+    },
+    {
+        Icon: GraduationCap,
+        title: { uz: 'Turon Edu', ru: 'Turon Edu', en: 'Turon Edu' },
+        category: { uz: "Ta'lim", ru: 'Образование', en: 'Education' },
+        tags: {
+            uz: ['Python', 'Django', 'LMS'],
+            ru: ['Python', 'Django', 'LMS'],
+            en: ['Python', 'Django', 'LMS'],
+        },
+        desc: {
+            uz: "Onlayn kurslar, testlar va sertifikatlashni birlashtirgan ta'lim platformasi.",
+            ru: 'Образовательная платформа, объединяющая онлайн-курсы, тесты и сертификацию.',
+            en: 'An education platform combining online courses, tests and certification.',
+        },
+        from: '#8B5CF6',
+        to: '#6366F1',
+    },
+    {
+        Icon: ShoppingBag,
+        title: { uz: 'Caspian Store', ru: 'Caspian Store', en: 'Caspian Store' },
+        category: { uz: 'E-commerce', ru: 'E-commerce', en: 'E-commerce' },
+        tags: {
+            uz: ['React', 'Node.js', 'MongoDB'],
+            ru: ['React', 'Node.js', 'MongoDB'],
+            en: ['React', 'Node.js', 'MongoDB'],
+        },
+        desc: {
+            uz: "To'lov va yetkazib berish integratsiyasi bilan to'liq do'kon — admin paneldan tortib filtrlargacha.",
+            ru: 'Полноценный магазин с интеграцией оплаты и доставки — от админ-панели до фильтров.',
+            en: 'A full-fledged store with payment and delivery integration — from admin panel to filters.',
+        },
+        from: '#14B8A6',
+        to: '#84CC16',
+    },
+    {
+        Icon: Users,
+        title: { uz: 'Sahro CRM', ru: 'Sahro CRM', en: 'Sahro CRM' },
+        category: { uz: 'CRM', ru: 'CRM', en: 'CRM' },
+        tags: {
+            uz: ['PostgreSQL', 'Analytics', 'Automation'],
+            ru: ['PostgreSQL', 'Analytics', 'Automation'],
+            en: ['PostgreSQL', 'Analytics', 'Automation'],
+        },
+        desc: {
+            uz: 'Mijozlar, savdo funneli va jamoani bitta panelda boshqarish uchun CRM tizimi.',
+            ru: 'CRM-система для управления клиентами, воронкой продаж и командой в одной панели.',
+            en: 'A CRM system to manage customers, the sales funnel and the team in one panel.',
+        },
+        from: '#0EA5E9',
+        to: '#6366F1',
+    },
+    {
+        Icon: Leaf,
+        title: { uz: 'Iqlim Monitor', ru: 'Iqlim Monitor', en: 'Iqlim Monitor' },
+        category: { uz: 'Atrof-muhit', ru: 'Окружающая среда', en: 'Environment' },
+        tags: {
+            uz: ['IoT', 'Dashboard', 'Linux'],
+            ru: ['IoT', 'Dashboard', 'Linux'],
+            en: ['IoT', 'Dashboard', 'Linux'],
+        },
+        desc: {
+            uz: "Havo sifati va iqlim ma'lumotlarini sensorlardan to'plab ko'rsatuvchi monitor.",
+            ru: 'Монитор, собирающий и отображающий данные о качестве воздуха и климате с датчиков.',
+            en: 'A monitor that collects and displays air quality and climate data from sensors.',
+        },
+        from: '#22C55E',
+        to: '#06B6D4',
+    },
+    {
+        Icon: Brain,
+        title: { uz: 'Qudrat AI', ru: 'Qudrat AI', en: 'Qudrat AI' },
+        category: { uz: 'AI / Backend', ru: 'AI / Backend', en: 'AI / Backend' },
+        tags: {
+            uz: ['Python', 'API', 'ML'],
+            ru: ['Python', 'API', 'ML'],
+            en: ['Python', 'API', 'ML'],
+        },
+        desc: {
+            uz: "Tabiiy tilda so'rovlarni tushunuvchi va avtomatlashtirilgan javob beruvchi AI yordamchi.",
+            ru: 'AI-ассистент, понимающий запросы на естественном языке и отвечающий автоматически.',
+            en: 'An AI assistant that understands natural language queries and replies automatically.',
+        },
+        from: '#F97316',
+        to: '#EC4899',
+    },
+];
