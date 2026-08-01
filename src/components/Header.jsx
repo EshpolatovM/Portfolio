@@ -1,44 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import logo from '../assets/logo.png';
 
 const NAV_LINKS = [
-    { href: '#work', label: 'Work' },
-    { href: '#services', label: 'Services' },
-    { href: '#about', label: 'About' },
-    { href: '#team', label: 'Team' },
-    { href: '#contact', label: 'Contact' },
+    { to: '/', label: 'Home' },
+    { to: '/about', label: 'About' },
+    { to: '/project', label: 'Project' },
+    { to: '/contact', label: 'Contact' },
 ];
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const [activeId, setActiveId] = useState('work');
-
-    const navRef = useRef(null);
-
-    // Track which section is in view to set the active link
-    useEffect(() => {
-        const sections = NAV_LINKS.map((link) => document.querySelector(link.href)).filter(Boolean);
-        if (sections.length === 0) return;
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) setActiveId(entry.target.id);
-                });
-            },
-            { rootMargin: '-45% 0px -45% 0px' }
-        );
-
-        sections.forEach((section) => observer.observe(section));
-        return () => observer.disconnect();
-    }, []);
-
-    const handleLinkClick = (id) => {
-        setActiveId(id);
-        setMenuOpen(false);
-    };
 
     return (
         <>
@@ -50,7 +24,7 @@ const Header = () => {
           .df-cta { font-family: 'Space Grotesk', sans-serif; }
         `}</style>
 
-                <header className="w-full max-w-5xl">
+                <header className="w-full   max-w-5xl">
                     {/* Rotating gradient border ring — the only animation on this component */}
                     <div className="relative rounded-full p-[1.5px] overflow-hidden">
                         <motion.div
@@ -68,37 +42,44 @@ const Header = () => {
                             {/* Logo */}
                             <a
                                 href="#top"
-                                className="df-logo font-semibold text-xl tracking-tight text-slate-50 flex items-center gap-3 shrink-0"
+                                className="df-logo font-semibold text-lg tracking-tight text-slate-50 flex items-center gap-3 shrink-0"
                             >
-                                <span className="relative flex items-center justify-center rounded-full bg-slate-900/95 border border-white/10 p-1.5 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.8)]">
-                                    <img src={logo} alt="Dualis Team logo" className="h-14 w-14 rounded-full object-cover" />
+                                <span className="relative flex h-20 w-20 rounded-full overflow-hidden group/logo">
+                                    <span
+                                        aria-hidden="true"
+                                        className="absolute -inset-[150%] opacity-0 transition-opacity duration-500 group-hover/logo:opacity-100"
+                                        style={{
+                                            background:
+                                                'conic-gradient(from 0deg, #2563EB, #22D3EE, transparent 35%, transparent 65%, #2563EB)',
+                                            animation: 'spin-slow 3s linear infinite',
+                                        }}
+                                    />
+                                    <span className="relative flex h-full w-full items-center justify-center rounded-full bg-slate-900/95 border border-white/10 p-1.5 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.8)]">
+                                        <img src={logo} alt="Dualis Team logo" className="h-full w-full rounded-full object-cover" />
+                                    </span>
                                 </span>
                                 <span className="hidden sm:inline">Dualis Team</span>
                             </a>
 
                             {/* Desktop nav — plain hover/active states, no motion */}
-                            <nav
-                                ref={navRef}
-                                className="df-nav hidden md:flex items-center gap-1 text-base font-medium"
-                            >
-                                {NAV_LINKS.map((link) => {
-                                    const id = link.href.slice(1);
-                                    const isActive = activeId === id;
-                                    return (
-                                        <a
-                                            key={link.href}
-                                            href={link.href}
-                                            onClick={() => handleLinkClick(id)}
-                                            className={`px-5 py-2 rounded-full transition-colors duration-200 ${
+                            <nav className="df-nav hidden md:flex items-center gap-1 text-base font-medium">
+                                {NAV_LINKS.map((link) => (
+                                    <NavLink
+                                        key={link.to}
+                                        to={link.to}
+                                        end={link.to === '/'}
+                                        onClick={() => setMenuOpen(false)}
+                                        className={({ isActive }) =>
+                                            `px-5 py-2 rounded-full transition-colors duration-200 ${
                                                 isActive
                                                     ? 'text-slate-50 bg-blue-500/15 border border-blue-400/25'
                                                     : 'text-slate-400 hover:text-slate-100 hover:bg-white/[0.04]'
-                                            }`}
-                                        >
-                                            {link.label}
-                                        </a>
-                                    );
-                                })}
+                                            }`
+                                        }
+                                    >
+                                        {link.label}
+                                    </NavLink>
+                                ))}
                             </nav>
 
                             {/* CTA — static shape, plain hover color change */}
@@ -141,22 +122,21 @@ const Header = () => {
                     {/* Mobile menu — plain conditional render, no motion */}
                     {menuOpen && (
                         <nav className="df-nav md:hidden mt-3 rounded-3xl border border-blue-400/10 bg-gradient-to-b from-[#0B142B] to-[#080F22] backdrop-blur-xl shadow-[0_12px_45px_-10px_rgba(0,0,0,0.8)] px-3 py-3 flex flex-col gap-1">
-                            {NAV_LINKS.map((link) => {
-                                const id = link.href.slice(1);
-                                const isActive = activeId === id;
-                                return (
-                                    <a
-                                        key={link.href}
-                                        href={link.href}
-                                        onClick={() => handleLinkClick(id)}
-                                        className={`px-4 py-3 rounded-xl text-base transition-colors ${
+                            {NAV_LINKS.map((link) => (
+                                <NavLink
+                                    key={link.to}
+                                    to={link.to}
+                                    end={link.to === '/'}
+                                    onClick={() => setMenuOpen(false)}
+                                    className={({ isActive }) =>
+                                        `px-4 py-3 rounded-xl text-base transition-colors ${
                                             isActive ? 'text-slate-50 bg-blue-500/15 font-medium' : 'text-slate-400'
-                                        }`}
-                                    >
-                                        {link.label}
-                                    </a>
-                                );
-                            })}
+                                        }`
+                                    }
+                                >
+                                    {link.label}
+                                </NavLink>
+                            ))}
                             <a
                                 href="#contact"
                                 onClick={() => setMenuOpen(false)}
