@@ -1,11 +1,106 @@
 @import "tailwindcss";
 
+:root {
+    color-scheme: dark;
+
+    --bg-a: #0d131f;
+    --bg-b: #07090d;
+    --bg-c: #05070a;
+
+    --surface-a: #0b142b;
+    --surface-b: #080f22;
+    --deep-a: #060b18;
+    --deep-b: #02040a;
+    --soft-bg: rgba(255, 255, 255, 0.02);
+    --chip-bg: rgba(255, 255, 255, 0.03);
+    --logo-bg: rgba(5, 9, 18, 0.95);
+    --tile-bg: rgba(10, 18, 38, 0.9);
+
+    --border: rgba(255, 255, 255, 0.1);
+    --border-soft: rgba(255, 255, 255, 0.06);
+
+    --text-strong: #eef1ff;
+    --text-soft: #94a3b8;
+    --text-muted: #64748b;
+    --text-faint: #475569;
+
+    --grad-a: #eef1ff;
+    --grad-b: #4fd8e8;
+    --grad-c: #eef1ff;
+    --watermark: linear-gradient(180deg, rgba(238, 241, 255, 0.06), rgba(79, 216, 232, 0.04));
+
+    --accent-text: rgba(34, 211, 238, 0.8);
+    --accent-icon: #22d3ee;
+
+    --grid-line: rgba(148, 163, 184, 0.06);
+}
+
+[data-theme='light'] {
+    color-scheme: light;
+
+    --bg-a: #f6f9fc;
+    --bg-b: #eef2f7;
+    --bg-c: #e4eaf2;
+
+    --surface-a: #ffffff;
+    --surface-b: #f1f5f9;
+    --deep-a: #ffffff;
+    --deep-b: #eef2f7;
+    --soft-bg: rgba(15, 23, 42, 0.03);
+    --chip-bg: rgba(15, 23, 42, 0.04);
+    --logo-bg: rgba(255, 255, 255, 0.95);
+    --tile-bg: rgba(255, 255, 255, 0.92);
+
+    --border: rgba(15, 23, 42, 0.12);
+    --border-soft: rgba(15, 23, 42, 0.07);
+
+    --text-strong: #0f172a;
+    --text-soft: #475569;
+    --text-muted: #64748b;
+    --text-faint: #94a3b8;
+
+    --grad-a: #0f172a;
+    --grad-b: #0891b2;
+    --grad-c: #0f172a;
+    --watermark: linear-gradient(180deg, rgba(15, 23, 42, 0.05), rgba(8, 145, 178, 0.05));
+
+    --grid-line: rgba(15, 23, 42, 0.05);
+
+    --accent-text: #0e7490;
+    --accent-icon: #0891b2;
+}
+
 body {
     margin: 0;
     min-height: 100vh;
-    background: radial-gradient(ellipse 120% 90% at 50% 0%, #0d131f 0%, #07090d 55%, #05070a 100%);
-    color: #ffffff;
-    font-family: system-ui, -apple-system, sans-serif;
+    background: radial-gradient(ellipse 120% 90% at 50% 0%, var(--bg-a) 0%, var(--bg-b) 55%, var(--bg-c) 100%);
+    color: var(--text-strong);
+    font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.df-logo {
+    font-family: 'Sora', system-ui, sans-serif;
+}
+
+.df-nav {
+    font-family: 'Manrope', system-ui, sans-serif;
+}
+
+.df-cta {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+
+.df-grad-text {
+    background-image: linear-gradient(90deg, var(--grad-a), var(--grad-b), var(--grad-c));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.df-eyebrow {
+    color: var(--accent-text);
 }
 
 @keyframes spin-slow {
@@ -15,4 +110,64 @@ body {
     to {
         transform: rotate(360deg);
     }
+}
+
+.df-card {
+    position: relative;
+    isolation: isolate;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.df-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.55), rgba(34, 211, 238, 0.22) 40%, rgba(255, 255, 255, 0.08) 70%, rgba(34, 211, 238, 0.35));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.df-card:hover::before {
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.85), rgba(34, 211, 238, 0.45) 40%, rgba(255, 255, 255, 0.12) 70%, rgba(34, 211, 238, 0.55));
+}
+
+.df-card:hover {
+    box-shadow: 0 24px 60px -24px rgba(37, 99, 235, 0.5);
+}
+
+.df-chip {
+    position: relative;
+}
+
+.df-chip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(120deg, rgba(59, 130, 246, 0.5), rgba(34, 211, 238, 0.25));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.df-chip:hover::before {
+    background: linear-gradient(120deg, rgba(96, 165, 250, 0.8), rgba(34, 211, 238, 0.5));
+}
+
+.df-grid-bg {
+    background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
 }

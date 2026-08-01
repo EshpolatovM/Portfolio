@@ -4,6 +4,7 @@ import Home from '../page/Home.jsx'
 import About from '../page/About.jsx'
 import Contact from '../page/Contact.jsx'
 import Project from '../page/Project.jsx'
+import NotFound from '../page/NotFound.jsx'
 
 export const routes = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ export const routes = createBrowserRouter([
             {
                 path: 'project',
                 element: <Project />,
+            },
+            {
+                path: '*',
+                element: <NotFound />,
             },
         ],
     },
