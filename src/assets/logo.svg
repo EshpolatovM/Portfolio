@@ -1,0 +1,38 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="badgeGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0E1B33"/>
+      <stop offset="1" stop-color="#070D1C"/>
+    </linearGradient>
+    <linearGradient id="darkD" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="lightD" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#93C5FD"/>
+      <stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+    <radialGradient id="radGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#60A5FA" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#60A5FA" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#3B82F6" flood-opacity="0.35"/>
+    </filter>
+    <clipPath id="splitCut">
+      <polygon points="308,0 512,0 512,512 208,512"/>
+    </clipPath>
+  </defs>
+
+  <rect x="16" y="16" width="480" height="480" rx="140" fill="url(#badgeGrad)"/>
+  <rect x="16" y="16" width="480" height="480" rx="140" stroke="url(#darkD)" stroke-opacity="0.35" stroke-width="4"/>
+
+  <circle cx="208" cy="256" r="210" fill="url(#radGlow)"/>
+
+  <g filter="url(#glow)">
+    <path d="M208 168 A88 88 0 0 1 208 344 L208 168 Z" stroke="url(#darkD)" stroke-width="88" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M208 168 A88 88 0 0 1 208 344 L208 168 Z" stroke="url(#lightD)" stroke-width="88" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#splitCut)"/>
+  </g>
+
+  <path d="M404 116 C406 134 418 146 436 148 C418 150 406 162 404 180 C402 162 390 150 372 148 C390 146 402 134 404 116 Z" fill="#67E8F9" opacity="0.95"/>
+</svg>
