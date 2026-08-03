@@ -104,11 +104,11 @@ const Footer = () => {
     return (
         <footer className="footer-shell relative overflow-hidden bg-[#030509] rounded-t-[36px] md:rounded-t-[48px]">
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,500;1,600&family=Outfit:wght@400;500;600;700&display=swap');
         .footer-shell .df-headline,
-        .footer-shell .df-logo { font-family: 'Unbounded', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 600; letter-spacing: -0.01em; }
+        .footer-shell .df-logo { font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 500; letter-spacing: -0.01em; }
         .footer-shell .df-nav,
-        .footer-shell .df-cta { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        .footer-shell .df-cta { font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
         .footer-shell .df-top-line {
           background: linear-gradient(90deg, transparent, rgba(96,165,250,0.45), transparent);
@@ -219,15 +219,12 @@ const Footer = () => {
                     <motion.div variants={listContainer} initial="hidden" whileInView="show" viewport={{ once: true }}>
                         <p className="df-nav text-xs uppercase tracking-[0.25em] text-slate-600 mb-6">Sitemap</p>
                         <ul className="df-nav flex flex-col gap-4">
-                            {SITEMAP.map((link, i) => (
+                            {SITEMAP.map((link) => (
                                 <motion.li key={link.label} variants={listItem}>
                                     <a
                                         href={link.href}
-                                        className="group inline-flex items-baseline gap-3 text-sm text-slate-400 hover:text-white transition-colors duration-200"
+                                        className="group inline-flex items-baseline text-sm text-slate-400 hover:text-white transition-colors duration-200"
                                     >
-                                        <span className="text-[10px] font-medium text-blue-400/60 group-hover:text-blue-300 transition-colors duration-200">
-                                            0{i + 1}
-                                        </span>
                                         <span className="relative">
                                             {link.label}
                                             <span className="absolute left-0 -bottom-0.5 h-px w-0 bg-blue-300 transition-all duration-300 group-hover:w-full" />
@@ -241,15 +238,12 @@ const Footer = () => {
                     <motion.div variants={listContainer} initial="hidden" whileInView="show" viewport={{ once: true }}>
                         <p className="df-nav text-xs uppercase tracking-[0.25em] text-slate-600 mb-6">Studio</p>
                         <ul className="df-nav flex flex-col gap-4">
-                            {STUDIO.map((link, i) => (
+                            {STUDIO.map((link) => (
                                 <motion.li key={link.label} variants={listItem}>
                                     <a
                                         href={link.href}
-                                        className="group inline-flex items-baseline gap-3 text-sm text-slate-400 hover:text-white transition-colors duration-200"
+                                        className="group inline-flex items-baseline text-sm text-slate-400 hover:text-white transition-colors duration-200"
                                     >
-                                        <span className="text-[10px] font-medium text-blue-400/60 group-hover:text-blue-300 transition-colors duration-200">
-                                            0{i + 1}
-                                        </span>
                                         <span className="relative">
                                             {link.label}
                                             <span className="absolute left-0 -bottom-0.5 h-px w-0 bg-blue-300 transition-all duration-300 group-hover:w-full" />

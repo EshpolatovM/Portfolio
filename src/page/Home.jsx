@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
     ArrowUpRight,
@@ -6,35 +6,57 @@ import {
     Code2,
     Rocket,
     Smartphone,
-    Sparkles,
     PenTool,
     Zap,
     Shield,
     Users,
     Quote,
+    Terminal,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { gsap } from '../lib/gsap';
 import GsapCounter from '../components/GsapCounter.jsx';
+import { PROJECTS } from '../data/projects.js';
 import logo from '../assets/logo.png';
+
+/* ===================================================================
+   DESIGN NOTE (leave for the next dev touching this file):
+
+   The brand fact worth building around is structural, not decorative:
+   every project runs through exactly one designer + one engineer.
+   So instead of a generic dark-hero-with-glow, the whole page treats
+   "two roles, one output" as the actual design system:
+
+     - gold  (--role-designer) tags anything design-side
+     - blue  (--role-engineer) tags anything engineering-side
+     - the two only merge to white/gradient at the point of a finished
+       outcome (headline's third line, CTA, final stat)
+
+   Typography was previously switching families after the first
+   section (Newsreader/Outfit in hero, Sora/Manrope everywhere else)
+   with no reason behind it — that's fixed here to one consistent
+   pairing: Newsreader (italic, display) + Outfit (everything else).
+   =================================================================== */
+
+const ROLE = {
+    designer: '#F2B84B', // warm gold — design/craft
+    engineer: '#4C8DFA', // brand blue — engineering/logic (matches existing CTAs)
+};
 
 const container = {
     hidden: {},
     show: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } },
 };
-
 const item = {
-    hidden: { opacity: 0, y: 24 },
+    hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
 };
-
 const viewContainer = {
     hidden: {},
     show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
-
 const viewItem = {
-    hidden: { opacity: 0, y: 28 },
+    hidden: { opacity: 0, y: 26 },
     show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
 };
 
@@ -50,29 +72,32 @@ const SERVICES = [
         Icon: Palette,
         title: 'UI/UX Dizayn',
         desc: 'Mahsulotingizni yorqin va intuitiv qiladigan interfeyslar yaratamiz — prototipdan to yakuniy dizayn sistemasigacha.',
+        role: 'designer',
     },
     {
         Icon: Code2,
         title: 'Web Dasturlash',
         desc: 'Tez, xavfsiz va zamonaviy frontend hamda backend yechimlar. React, Node va boshqa zamonaviy stackda ishlaymiz.',
+        role: 'engineer',
     },
     {
         Icon: Smartphone,
         title: 'Mobil Ilovalar',
         desc: "iOS va Android uchun silliq ishlaydigan, foydalanuvchiga yo'naltirilgan mobil ilovalarni ishlab chiqamiz.",
+        role: 'engineer',
     },
     {
         Icon: Rocket,
         title: 'Brending',
         desc: 'Logotipdan to brend kitgacha — brendingizni eslab qoladigan va taniladigan qilamiz.',
+        role: 'designer',
     },
 ];
 
-const PROJECTS = [
-    { title: 'Nova Finance', category: 'Fintech', tags: ['React', 'UI/UX', 'SaaS'] },
-    { title: 'Atlas Logistics', category: 'Logistika', tags: ['Dashboard', 'Mobile', 'Branding'] },
-    { title: 'Vela Health', category: "Sog'liqni saqlash", tags: ['Telemed', 'Design System'] },
-];
+// Shared project data (icons + accent colors) lives in src/data/projects.js —
+// the same file feeds both Home highlights and the Project page, so every
+// project keeps one consistent identity across the site.
+const FEATURED = PROJECTS.slice(0, 3);
 
 const PROCESS = [
     { Icon: PenTool, title: 'Tahlil', desc: "Maqsad va auditoriyani chuqur o'rganamiz." },
@@ -81,20 +106,10 @@ const PROCESS = [
     { Icon: Zap, title: 'Tekshiruv', desc: 'Sinov, optimizatsiya va ishga tushirish.' },
 ];
 
-const TECH = [
-    'React',
-    'TypeScript',
-    'Next.js',
-    'Node.js',
-    'Tailwind CSS',
-    'Framer Motion',
-    'GSAP',
-    'PostgreSQL',
-    'MongoDB',
-    'GraphQL',
-    'Docker',
-    'Figma',
-];
+// Two real, distinct tool sets instead of the same list mirrored twice —
+// each marquee row now actually means something (who reaches for it).
+const DESIGN_TOOLS = ['Figma', 'Framer', 'Illustrator', 'Photoshop', 'Principle', 'Webflow'];
+const ENGINEERING_TOOLS = ['React', 'TypeScript', 'Next.js', 'Node.js', 'PostgreSQL', 'GraphQL', 'Docker', 'Tailwind CSS'];
 
 const TESTIMONIALS = [
     {
@@ -103,40 +118,24 @@ const TESTIMONIALS = [
         role: 'Nova Finance asoschisi',
     },
     {
-        quote: 'Dizayn va texnik sifat bitta jamoada bo\'lishi mumkinligini ular isbotladi.',
+        quote: "Dizayn va texnik sifat bitta jamoada bo'lishi mumkinligini ular isbotladi.",
         name: 'Malika Yusupova',
         role: 'Atlas Logistics CTO',
     },
 ];
 
-const STAR_COUNT = 60;
-
 const Home = () => {
     const [offset, setOffset] = useState({ x: 0, y: 0 });
-    const MAX = 50;
-
-    const stars = useMemo(
-        () =>
-            Array.from({ length: STAR_COUNT }).map((_, i) => ({
-                id: i,
-                top: Math.random() * 100,
-                left: Math.random() * 100,
-                size: Math.random() * 1.8 + 0.6,
-                duration: Math.random() * 3 + 2.5,
-                delay: Math.random() * 5,
-            })),
-        []
-    );
-
-    const handleMouseMove = (e) => {
-        const cx = window.innerWidth / 2;
-        const cy = window.innerHeight / 2;
-        const rawX = (e.clientX - cx) * 0.1;
-        const rawY = (e.clientY - cy) * 0.1;
-        setOffset({ x: Math.max(-MAX, Math.min(MAX, rawX)), y: Math.max(-MAX, Math.min(MAX, rawY)) });
-    };
+    const MAX = 18;
 
     useEffect(() => {
+        const handleMouseMove = (e) => {
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2;
+            const rawX = (e.clientX - cx) * 0.04;
+            const rawY = (e.clientY - cy) * 0.04;
+            setOffset({ x: Math.max(-MAX, Math.min(MAX, rawX)), y: Math.max(-MAX, Math.min(MAX, rawY)) });
+        };
         window.addEventListener('mousemove', handleMouseMove);
         return () => window.removeEventListener('mousemove', handleMouseMove);
     }, []);
@@ -144,7 +143,7 @@ const Home = () => {
     useEffect(() => {
         const ctx = gsap.context(() => {
             gsap.to('.gsap-parallax', {
-                yPercent: 22,
+                yPercent: 20,
                 ease: 'none',
                 scrollTrigger: {
                     trigger: '.home-shell',
@@ -160,14 +159,13 @@ const Home = () => {
     return (
         <div className="home-shell">
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,500;1,600&family=Outfit:wght@400;500;600;700&family=Sora:wght@500;600;700&family=Manrope:wght@500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,500;1,600&family=Outfit:wght@400;500;600;700&display=swap');
+
+        /* One consistent pairing everywhere — no more silent typeface
+           swap after the first section. */
         .home-shell .df-logo { font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 500; letter-spacing: -0.01em; }
         .home-shell .df-nav,
         .home-shell .df-cta { font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-
-        .home-shell section:not(:first-of-type) .df-logo { font-family: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-style: normal; font-weight: 600; letter-spacing: -0.02em; }
-        .home-shell section:not(:first-of-type) .df-nav,
-        .home-shell section:not(:first-of-type) .df-cta { font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
         .home-shell .df-glass {
           background: linear-gradient(155deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015));
@@ -175,76 +173,32 @@ const Home = () => {
           -webkit-backdrop-filter: blur(18px);
           border: 1px solid rgba(255,255,255,0.08);
         }
-        .home-shell .df-glass::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: inherit;
-          padding: 1px;
-          background: linear-gradient(135deg, rgba(147,197,253,0.25), transparent 40%);
-          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          pointer-events: none;
-        }
 
         @keyframes df-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes df-float { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(-4px); opacity: 0.5; } }
-        .home-shell .df-float { animation: df-float 2.4s ease-in-out infinite; }
-        .home-shell .df-marquee-track { animation: df-marquee 26s linear infinite; }
-        .home-shell .df-marquee-track-reverse { animation: df-marquee 34s linear infinite reverse; }
+        @keyframes df-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+        .home-shell .df-marquee-track { animation: df-marquee 28s linear infinite; }
+        .home-shell .df-marquee-track-reverse { animation: df-marquee 28s linear infinite reverse; }
         .home-shell .df-marquee-wrap:hover .df-marquee-track,
         .home-shell .df-marquee-wrap:hover .df-marquee-track-reverse { animation-play-state: paused; }
         .home-shell .df-marquee-wrap {
           -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
           mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
         }
+        .home-shell .df-float-designer { animation: df-float 5s ease-in-out infinite; }
+        .home-shell .df-float-engineer { animation: df-float 5s ease-in-out infinite; animation-delay: 1.4s; }
 
-        @keyframes df-twinkle { 0%, 100% { opacity: 0.12; } 50% { opacity: 0.95; } }
-        .home-shell .df-twinkle { animation-name: df-twinkle; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
-
-        @keyframes df-drift-a { 0%, 100% { transform: translate(-10%, -10%); } 50% { transform: translate(8%, 6%); } }
-        @keyframes df-drift-b { 0%, 100% { transform: translate(6%, 4%); } 50% { transform: translate(-10%, -8%); } }
-        .home-shell .df-drift-a { animation: df-drift-a 16s ease-in-out infinite; }
-        .home-shell .df-drift-b { animation: df-drift-b 20s ease-in-out infinite; }
-
-        @keyframes df-grid-fade { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.9; } }
-        .home-shell .df-grid { animation: df-grid-fade 10s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .home-shell * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+        }
       `}</style>
 
             {/* ================= HERO ================= */}
-            <section className="relative overflow-hidden px-4 md:px-6 pb-24 pt-16 min-h-[calc(100vh-100px)] flex items-center">
-                {/* Background layer: starfield + drifting glow orbs + faint grid */}
+            {/* The hero's job is to show the pairing, not describe it — so the
+                headline itself carries the two roles as two lines of color,
+                converging on the third. Everything else in the hero is quiet. */}
+            <section className="relative overflow-hidden px-4 md:px-6 pb-24 pt-20 min-h-[calc(100vh-100px)] flex items-center">
                 <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
-                    <div
-                        className="df-grid absolute inset-0 opacity-60"
-                        style={{
-                            backgroundImage:
-                                'linear-gradient(rgba(96,165,250,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(96,165,250,0.05) 1px, transparent 1px)',
-                            backgroundSize: '56px 56px',
-                            maskImage: 'radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 80%)',
-                            WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 80%)',
-                        }}
-                    />
-
-                    {stars.map((s) => (
-                        <span
-                            key={s.id}
-                            className="absolute rounded-full bg-blue-100 df-twinkle"
-                            style={{
-                                top: `${s.top}%`,
-                                left: `${s.left}%`,
-                                width: `${s.size}px`,
-                                height: `${s.size}px`,
-                                animationDuration: `${s.duration}s`,
-                                animationDelay: `${s.delay}s`,
-                            }}
-                        />
-                    ))}
-
-                    <div className="gsap-parallax df-drift-a absolute top-[-10%] left-[10%] w-[480px] h-[480px] rounded-full bg-blue-600/15 blur-[130px]" />
-                    <div className="df-drift-b absolute bottom-[-15%] right-[8%] w-[420px] h-[420px] rounded-full bg-blue-400/10 blur-[120px]" />
+                    <div className="gsap-parallax absolute top-[-15%] left-1/2 -translate-x-1/2 w-[720px] h-[420px] rounded-full bg-blue-600/10 blur-[140px]" />
                 </div>
 
                 <motion.div
@@ -253,61 +207,44 @@ const Home = () => {
                     animate="show"
                     className="relative z-10 mx-auto max-w-3xl flex flex-col items-center text-center"
                 >
-                    {/* Orbiting duality badge */}
-                    <motion.div variants={item} className="relative flex items-center justify-center mb-10 w-[132px] h-[132px]">
-                        <motion.div
-                            animate={{ x: offset.x * 0.6, y: offset.y * 0.6 }}
-                            transition={{ type: 'spring', stiffness: 70, damping: 16, mass: 0.8 }}
-                            className="relative w-full h-full flex items-center justify-center"
-                        >
-                            <svg viewBox="0 0 200 200" className="absolute inset-0 w-full h-full animate-[spin-slow_20s_linear_infinite]">
-                                <defs>
-                                    <path id="df-circle-path" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0" fill="none" />
-                                </defs>
-                                <text className="df-nav fill-slate-300 text-[10.5px] uppercase tracking-[0.35em]">
-                                    <textPath href="#df-circle-path">Two minds · one vision · Dualis Team · Est. 2020 · </textPath>
-                                </text>
-                            </svg>
-
-                            {/* two orbiting dots — design & engineering, circling the mark */}
-                            <motion.div
-                                aria-hidden="true"
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 13, ease: 'linear', repeat: Infinity }}
-                                className="absolute inset-0"
-                            >
-                                <span className="absolute left-1/2 top-[6px] -translate-x-1/2 w-2 h-2 rounded-full bg-blue-200/90 shadow-[0_0_10px_2px_rgba(191,219,254,0.5)]" />
-                                <span className="absolute left-1/2 bottom-[6px] -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_12px_2px_rgba(59,130,246,0.6)]" />
-                            </motion.div>
-
-                            <div className="df-glass relative rounded-full p-2.5">
-                                <img src={logo} alt="Dualis Team logo" className="w-20 h-20 md:w-24 md:h-24 rounded-full object-cover" />
-                            </div>
-                        </motion.div>
+                    <motion.div variants={item} className="df-glass mb-9 inline-flex items-center gap-1 rounded-full p-1">
+                        <img src={logo} alt="Dualis Team" className="w-8 h-8 rounded-full object-cover" />
+                        <span className="df-nav pl-2 pr-4 text-xs uppercase tracking-[0.2em] text-slate-400">Dualis Team · Est. 2020</span>
                     </motion.div>
 
-                    <motion.p variants={item} className="df-nav inline-flex items-center gap-2.5 text-xs uppercase tracking-[0.2em] text-blue-300/80 mb-7">
-                        <span className="w-2 h-2 rounded-full bg-blue-400 df-float" />
-                        Juftlik asosidagi studiya
-                    </motion.p>
-
-                    <motion.h1 variants={item} className="df-logo text-5xl md:text-7xl leading-[1.02] text-slate-50">
-                        Two minds,
+                    <motion.h1 variants={item} className="relative df-logo text-5xl md:text-7xl leading-[1.05] text-slate-50">
+                        <span className="relative inline-block">
+                            <PenTool
+                                aria-hidden="true"
+                                className="df-float-designer absolute -left-9 md:-left-12 top-2 w-5 h-5 md:w-6 md:h-6 opacity-70"
+                                style={{ color: ROLE.designer, transform: `translate(${offset.x * -1}px, ${offset.y}px)` }}
+                                strokeWidth={1.75}
+                            />
+                            <span style={{ color: ROLE.designer }}>Dizayner.</span>
+                        </span>
+                        <br />
+                        <span className="relative inline-block mt-1">
+                            <Terminal
+                                aria-hidden="true"
+                                className="df-float-engineer absolute -right-9 md:-right-12 top-2 w-5 h-5 md:w-6 md:h-6 opacity-70"
+                                style={{ color: ROLE.engineer, transform: `translate(${offset.x}px, ${offset.y * -1}px)` }}
+                                strokeWidth={1.75}
+                            />
+                            <span style={{ color: ROLE.engineer }}>Muhandis.</span>
+                        </span>
+                        <br />
                         <motion.span
-                            className="block mt-2 bg-clip-text text-transparent"
-                            style={{
-                                backgroundImage: 'linear-gradient(90deg, #EEF1FF, #93C5FD, #EEF1FF)',
-                                backgroundSize: '200% 100%',
-                            }}
+                            className="inline-block mt-1 bg-clip-text text-transparent"
+                            style={{ backgroundImage: `linear-gradient(90deg, ${ROLE.designer}, #EEF1FF, ${ROLE.engineer})`, backgroundSize: '200% 100%' }}
                             animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
-                            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+                            transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
                         >
-                            one vision.
+                            Bitta jamoa.
                         </motion.span>
                     </motion.h1>
 
-                    <motion.p variants={item} className="df-nav mt-7 max-w-md text-lg text-slate-400 leading-relaxed">
-                        Biz dizayn va muhandislikni bitta jamoada birlashtiramiz — har bir loyihada bitta dizayner va bitta muhandis, yelkama-yelka.
+                    <motion.p variants={item} className="df-nav mt-8 max-w-md text-lg text-slate-400 leading-relaxed">
+                        Har bir loyihaga bitta dizayner va bitta muhandis birga kirishadi — g'oyadan ishga tushirilgan mahsulotgacha, ikkalasi ham boshidan oxirigacha yelkama-yelka.
                     </motion.p>
 
                     <motion.div variants={item} className="mt-10 flex flex-wrap items-center justify-center gap-4">
@@ -322,7 +259,7 @@ const Home = () => {
                                 whileHover={{ scaleX: 1 }}
                                 transition={{ duration: 0.4, ease: 'easeInOut' }}
                             />
-                            <span className="relative z-10 text-sm font-medium text-white transition-transform duration-300 group-hover:scale-[1.03]">Start a project</span>
+                            <span className="relative z-10 text-sm font-medium text-white transition-transform duration-300 group-hover:scale-[1.03]">Loyihani boshlash</span>
                             <motion.span
                                 className="relative z-10 w-9 h-9 rounded-full flex items-center justify-center text-white bg-gradient-to-br from-blue-700 to-blue-400 transition-shadow duration-300 group-hover:shadow-[0_0_18px_rgba(96,165,250,0.6)]"
                                 whileHover={{ rotate: 45, scale: 1.1 }}
@@ -336,7 +273,7 @@ const Home = () => {
                             to="/contact"
                             className="df-cta group inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-sm font-medium text-slate-300 transition-all duration-300 hover:text-white hover:border-blue-300/50 hover:bg-blue-400/10 hover:-translate-y-0.5"
                         >
-                            Contact
+                            Bog'lanish
                             <ArrowUpRight
                                 className="w-4 h-4 opacity-60 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:opacity-100"
                                 strokeWidth={2.25}
@@ -355,27 +292,7 @@ const Home = () => {
                 </motion.div>
             </section>
 
-            {/* ================= MARQUEE ================= */}
-            <div className="relative overflow-hidden py-3 df-marquee-wrap">
-                <div className="flex whitespace-nowrap df-marquee-track w-max">
-                    {Array.from({ length: 2 }).map((_, loop) => (
-                        <div key={loop} className="flex items-center">
-                            {Array.from({ length: 6 }).map((_, i) => (
-                                <span key={i} className="df-cta flex items-center gap-3 mx-4 text-sm tracking-wide text-slate-500">
-                                    DUALIS TEAM
-                                    <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-600 to-blue-300" />
-                                    TWO MINDS, ONE VISION
-                                    <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-600 to-blue-300" />
-                                    DESIGN &amp; ENGINEERING
-                                    <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-600 to-blue-300" />
-                                </span>
-                            ))}
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* ================= STATS ================= */}
+            {/* ================= STATS (in-view recount) ================= */}
             <section className="relative mx-auto max-w-6xl px-4 md:px-6 py-24">
                 <motion.div
                     variants={viewContainer}
@@ -422,7 +339,7 @@ const Home = () => {
                         </h2>
                     </motion.div>
                     <motion.p variants={viewItem} className="df-nav max-w-sm text-slate-400 leading-relaxed">
-                        Har bir loyihaga ikkita mutaxassis — dizayner va muhandis birgalikda yondashadi.
+                        Har bir xizmat qaysi tomon — dizayn yoki muhandislik — yetakchilik qilishini ochiq belgilaymiz.
                     </motion.p>
                 </motion.div>
 
@@ -433,23 +350,27 @@ const Home = () => {
                     viewport={{ once: true, amount: 0.2 }}
                     className="grid grid-cols-1 md:grid-cols-2 gap-5"
                 >
-                    {SERVICES.map(({ Icon, title, desc }) => (
+                    {SERVICES.map(({ Icon, title, desc, role }) => (
                         <motion.div
                             key={title}
                             variants={viewItem}
                             whileHover={{ y: -6, scale: 1.015 }}
                             transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                             className="df-glass group relative rounded-[28px] p-7 overflow-hidden transition-shadow duration-300 hover:shadow-[0_20px_60px_-20px_rgba(59,130,246,0.35)]"
+                            style={{ borderLeft: `2px solid ${ROLE[role]}55` }}
                         >
                             <div className="flex items-center justify-between mb-5">
                                 <motion.span
                                     whileHover={{ rotate: 12, scale: 1.08 }}
                                     transition={{ type: 'spring', stiffness: 300, damping: 12 }}
-                                    className="w-12 h-12 rounded-full flex items-center justify-center text-blue-300 bg-blue-500/10 border border-blue-400/20 group-hover:bg-blue-500/20 transition-colors duration-300"
+                                    className="w-12 h-12 rounded-full flex items-center justify-center border transition-colors duration-300"
+                                    style={{ color: ROLE[role], backgroundColor: `${ROLE[role]}1A`, borderColor: `${ROLE[role]}33` }}
                                 >
                                     <Icon className="w-6 h-6" strokeWidth={1.75} />
                                 </motion.span>
-                                <ArrowUpRight className="w-5 h-5 text-slate-600 opacity-0 -translate-x-1 translate-y-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:text-blue-300" />
+                                <span className="df-nav text-[11px] uppercase tracking-[0.15em]" style={{ color: ROLE[role] }}>
+                                    {role === 'designer' ? 'Dizayn' : 'Muhandislik'}
+                                </span>
                             </div>
                             <h3 className="df-logo text-xl text-slate-50 mb-2">{title}</h3>
                             <p className="df-nav text-slate-400 leading-relaxed">{desc}</p>
@@ -458,7 +379,7 @@ const Home = () => {
                 </motion.div>
             </section>
 
-            {/* ================= TECH STACK ================= */}
+            {/* ================= TOOLS (split by role, not repeated) ================= */}
             <section className="relative mx-auto max-w-6xl px-4 md:px-6 pb-24">
                 <motion.div
                     variants={viewContainer}
@@ -468,13 +389,13 @@ const Home = () => {
                     className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12"
                 >
                     <motion.div variants={viewItem}>
-                        <p className="df-cta text-xs uppercase tracking-[0.2em] text-blue-300/80 mb-3">Texnologiyalar</p>
+                        <p className="df-cta text-xs uppercase tracking-[0.2em] text-blue-300/80 mb-3">Asboblar</p>
                         <h2 className="df-logo text-3xl md:text-5xl text-slate-50 leading-[1.1]">
-                            Ishlaydigan <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg, #EEF1FF, #93C5FD)' }}>stack'imiz</span>
+                            Har ikki tomon <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg, #EEF1FF, #93C5FD)' }}>o'z vositalari bilan</span>
                         </h2>
                     </motion.div>
                     <motion.p variants={viewItem} className="df-nav max-w-sm text-slate-400 leading-relaxed">
-                        Har bir loyihani zamonaviy va isbotlangan texnologiyalar bilan quramiz.
+                        Yuqori qator — dizaynerning, pastki qator — muhandisning kundalik asboblari.
                     </motion.p>
                 </motion.div>
 
@@ -489,16 +410,15 @@ const Home = () => {
                         <div className="flex w-max items-center df-marquee-track">
                             {Array.from({ length: 2 }).map((_, loop) => (
                                 <div key={loop} className="flex items-center">
-                                    {TECH.map((tech) => (
-                                        <motion.span
-                                            key={`${tech}-${loop}`}
-                                            whileHover={{ y: -4, scale: 1.05 }}
-                                            transition={{ type: 'spring', stiffness: 300, damping: 18 }}
-                                            className="df-nav group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2.5 mx-2 text-sm text-slate-300 transition-colors duration-300 hover:border-blue-300/50 hover:bg-blue-500/10 hover:text-white"
+                                    {DESIGN_TOOLS.map((tool) => (
+                                        <span
+                                            key={`${tool}-${loop}`}
+                                            className="df-nav inline-flex items-center gap-2 rounded-full border px-5 py-2.5 mx-2 text-sm text-slate-200"
+                                            style={{ borderColor: `${ROLE.designer}33`, backgroundColor: `${ROLE.designer}0F` }}
                                         >
-                                            <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-600 to-blue-300 transition-transform duration-300 group-hover:scale-125" />
-                                            {tech}
-                                        </motion.span>
+                                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: ROLE.designer }} />
+                                            {tool}
+                                        </span>
                                     ))}
                                 </div>
                             ))}
@@ -509,16 +429,15 @@ const Home = () => {
                         <div className="flex w-max items-center df-marquee-track-reverse">
                             {Array.from({ length: 2 }).map((_, loop) => (
                                 <div key={loop} className="flex items-center">
-                                    {TECH.map((tech) => (
-                                        <motion.span
-                                            key={`${tech}-rev-${loop}`}
-                                            whileHover={{ y: -4, scale: 1.05 }}
-                                            transition={{ type: 'spring', stiffness: 300, damping: 18 }}
-                                            className="df-nav group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2.5 mx-2 text-sm text-slate-300 transition-colors duration-300 hover:border-blue-300/50 hover:bg-blue-500/10 hover:text-white"
+                                    {ENGINEERING_TOOLS.map((tool) => (
+                                        <span
+                                            key={`${tool}-${loop}`}
+                                            className="df-nav inline-flex items-center gap-2 rounded-full border px-5 py-2.5 mx-2 text-sm text-slate-200"
+                                            style={{ borderColor: `${ROLE.engineer}33`, backgroundColor: `${ROLE.engineer}0F` }}
                                         >
-                                            <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-br from-blue-600 to-blue-300 transition-transform duration-300 group-hover:scale-125" />
-                                            {tech}
-                                        </motion.span>
+                                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: ROLE.engineer }} />
+                                            {tool}
+                                        </span>
                                     ))}
                                 </div>
                             ))}
@@ -558,45 +477,47 @@ const Home = () => {
                     viewport={{ once: true, amount: 0.15 }}
                     className="grid grid-cols-1 md:grid-cols-3 gap-5"
                 >
-                    {PROJECTS.map(({ title, category, tags }) => (
+                    {FEATURED.map(({ title, category, tags, Icon, accent, lead }) => (
                         <motion.div
                             key={title}
                             variants={viewItem}
                             whileHover={{ y: -6, scale: 1.015 }}
                             transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                             className="df-glass group relative rounded-[28px] overflow-hidden transition-shadow duration-300 hover:shadow-[0_20px_60px_-20px_rgba(59,130,246,0.35)]"
+                            style={{ borderTop: `2px solid ${accent}55` }}
                         >
-                            <div className="relative h-40 m-3 rounded-3xl overflow-hidden bg-gradient-to-br from-blue-500/15 to-blue-300/10">
+                            <div className="relative h-40 m-3 rounded-3xl overflow-hidden" style={{ background: `linear-gradient(135deg, ${accent}2E, ${accent}0A 55%, transparent)` }}>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <motion.span
-                                        whileHover={{ rotate: 90, scale: 1.1 }}
-                                        transition={{ type: 'spring', stiffness: 260, damping: 14 }}
-                                        className="w-14 h-14 rounded-2xl flex items-center justify-center text-white bg-white/10 backdrop-blur border border-white/15"
+                                    <span
+                                        className="w-14 h-14 rounded-2xl flex items-center justify-center bg-white/10 backdrop-blur border border-white/15"
+                                        style={{ color: accent }}
                                     >
-                                        <Sparkles className="w-7 h-7" strokeWidth={1.75} />
-                                    </motion.span>
+                                        <Icon className="w-7 h-7" strokeWidth={1.75} />
+                                    </span>
                                 </div>
                             </div>
                             <div className="px-5 pb-6">
-                                <p className="df-cta text-xs uppercase tracking-[0.2em] text-blue-300/80">{category}</p>
-                                <h3 className="df-logo mt-1 text-xl text-slate-50 flex items-center justify-between">
-                                    {title}
-                                    <ArrowUpRight className="w-5 h-5 text-slate-600 transition-all duration-300 group-hover:text-blue-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                                </h3>
-                                <div className="mt-4 flex flex-wrap gap-2">
-                                    {tags.map((tag) => (
-                                        <span key={tag} className="df-nav text-xs text-slate-400 rounded-full border border-white/10 px-3 py-1">
-                                            {tag}
-                                        </span>
-                                    ))}
+                                <p className="df-cta text-xs uppercase tracking-[0.2em]" style={{ color: accent }}>
+                                    {category} · {lead === 'designer' ? 'Dizayn yetakchi' : 'Muhandislik yetakchi'}
+                                </p>
+                                    <h3 className="df-logo mt-1 text-xl text-slate-50 flex items-center justify-between">
+                                        {title}
+                                        <ArrowUpRight className="w-5 h-5 text-slate-600 transition-all duration-300 group-hover:text-blue-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                    </h3>
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                        {tags.map((tag) => (
+                                            <span key={tag} className="df-nav text-xs text-slate-400 rounded-full border border-white/10 px-3 py-1">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                        </motion.div>
-                    ))}
+                            </motion.div>
+                        ))}
                 </motion.div>
             </section>
 
-            {/* ================= PROCESS ================= */}
+            {/* ================= PROCESS (a real sequence, so numbering earns its place) ================= */}
             <section className="relative mx-auto max-w-6xl px-4 md:px-6 pb-24">
                 <motion.div
                     variants={viewContainer}
@@ -643,7 +564,7 @@ const Home = () => {
                 >
                     <motion.p variants={viewItem} className="df-cta text-xs uppercase tracking-[0.2em] text-blue-300/80 mb-3">Fikrlar</motion.p>
                     <motion.h2 variants={viewItem} className="df-logo text-3xl md:text-5xl text-slate-50 leading-[1.1]">
-                        Mijozlarimiz <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg, #EEF1FF, #93C5FD)' }}>nimadir deydi</span>
+                        Mijozlarimiz <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg, #EEF1FF, #93C5FD)' }}>nima deydi</span>
                     </motion.h2>
                 </motion.div>
 
@@ -716,11 +637,9 @@ const Home = () => {
                     transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                     className="df-glass relative overflow-hidden rounded-[40px] px-6 md:px-14 py-16 text-center"
                 >
-                    <motion.div
+                    <div
                         aria-hidden="true"
                         className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 w-[520px] h-[300px] rounded-full bg-blue-600/15 blur-[100px]"
-                        animate={{ opacity: [0.6, 1, 0.6] }}
-                        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
                     />
 
                     <div className="relative">
@@ -728,7 +647,7 @@ const Home = () => {
                             G'oyangiz bormi? Uni{' '}
                             <motion.span
                                 className="bg-clip-text text-transparent"
-                                style={{ backgroundImage: 'linear-gradient(90deg, #EEF1FF, #93C5FD, #EEF1FF)', backgroundSize: '200% 100%' }}
+                                style={{ backgroundImage: `linear-gradient(90deg, ${ROLE.designer}, #EEF1FF, ${ROLE.engineer})`, backgroundSize: '200% 100%' }}
                                 animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
                                 transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
                             >
@@ -742,7 +661,7 @@ const Home = () => {
                             to="/contact"
                             className="df-cta group inline-flex items-center gap-3 rounded-full border border-blue-400/25 pl-6 pr-1.5 py-1.5 mt-8 overflow-hidden transition-all duration-300 hover:shadow-[0_0_35px_-5px_rgba(96,165,250,0.5)] hover:border-blue-300/60 hover:-translate-y-0.5"
                         >
-                            <span className="relative z-10 text-sm font-medium text-white">Get in touch</span>
+                            <span className="relative z-10 text-sm font-medium text-white">Bog'lanish</span>
                             <span className="relative z-10 w-9 h-9 rounded-full flex items-center justify-center text-white bg-gradient-to-br from-blue-700 to-blue-400 transition-transform duration-300 group-hover:rotate-45">
                                 <ArrowUpRight className="w-4 h-4" strokeWidth={2.25} />
                             </span>

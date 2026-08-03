@@ -44,10 +44,10 @@ const Header = () => {
         <>
             <div className="header-shell fixed top-3 md:top-4 inset-x-0 z-50 flex justify-center px-4">
                 <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@500;600;700&display=swap');
-          .header-shell .df-logo { font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+          @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,500;1,600&family=Outfit:wght@400;500;600;700&display=swap');
+          .header-shell .df-logo { font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 500; letter-spacing: -0.01em; }
           .header-shell .df-nav,
-          .header-shell .df-cta { font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+          .header-shell .df-cta { font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
           @keyframes df-shimmer {
             0%   { transform: translateX(-120%); }

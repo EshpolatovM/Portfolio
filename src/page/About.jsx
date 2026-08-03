@@ -49,18 +49,35 @@ const VALUES = [
     { Icon: Zap, title: 'Tezlik', desc: 'Bosqichlar orasida sustkashlik yo‘q — har kuni yangilanish.' },
 ];
 
-const DUO = [
+const TEAM = [
     {
-        Icon: Palette,
-        title: 'Dizayner',
-        desc: 'Interfeys, brend va vizual tilda mutaxassis. Foydalanuvchi muammosini tushunadi va uni chiroyli yechimga aylantiradi.',
-        tags: ['UI/UX', 'Branding', 'Prototyping'],
+        initials: 'EM',
+        name: 'Esanpolatov Miraziz',
+        year: '2012',
+        role: 'Frontend + Fullstack Developer',
+        accent: '#4C8DFA',
+        blurb: "Foydalanuvchi interfeysidan to ma'lumotlar bazasigacha — loyihani boshidan oxirigacha olib boradi. UI/UX bo'yicha ham boshlang'ich tajribaga ega.",
+        stack: [
+            { label: 'Frontend', tags: ['HTML', 'CSS', 'JavaScript', 'React', 'TailwindCSS', 'Bootstrap'] },
+            { label: 'Backend', tags: ['PostgreSQL', 'SQL', 'Supabase'] },
+            { label: 'Asoslar', tags: ['Python', 'Go (Golang)'] },
+        ],
+        learning: ['Django', 'Node.js'],
+        extra: 'UI/UX — boshlang\'ich tajriba',
     },
     {
-        Icon: Code2,
-        title: 'Muhandis',
-        desc: 'Dizaynni toza, tez va xavfsiz kodga aylantiradi. Texnik chegaralarni biladi va ularni yechimga aylantiradi.',
-        tags: ['Frontend', 'Backend', 'Mobile'],
+        initials: 'TA',
+        name: 'Toirov Asadbek',
+        year: '2011',
+        role: 'Frontend + Fullstack Developer',
+        accent: '#F2B84B',
+        blurb: "Toza va tartibli kod yozadi, frontenddan ma'lumotlar bazasigacha chuqur ishlay oladi. Yangi texnologiyalarni tez o'zlashtiradi.",
+        stack: [
+            { label: 'Frontend', tags: ['HTML', 'CSS', 'JavaScript', 'React', 'TailwindCSS'] },
+            { label: 'Backend', tags: ['PostgreSQL', 'SQL', 'Supabase'] },
+            { label: 'Asoslar', tags: ['Python', 'Go (Golang)'] },
+        ],
+        learning: ['Django', 'Node.js'],
     },
 ];
 
@@ -99,14 +116,10 @@ const About = () => {
     return (
         <div className="about-shell">
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,500;1,600&family=Outfit:wght@400;500;600;700&family=Sora:wght@500;600;700&family=Manrope:wght@500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,500;1,600&family=Outfit:wght@400;500;600;700&display=swap');
         .about-shell .df-logo { font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 500; letter-spacing: -0.01em; }
         .about-shell .df-nav,
         .about-shell .df-cta { font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-
-        .about-shell section:not(:first-of-type) .df-logo { font-family: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-style: normal; font-weight: 600; letter-spacing: -0.02em; }
-        .about-shell section:not(:first-of-type) .df-nav,
-        .about-shell section:not(:first-of-type) .df-cta { font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
         .about-shell .df-glass {
           background: linear-gradient(155deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015));
@@ -332,53 +345,110 @@ const About = () => {
                 </motion.div>
             </section>
 
-            {/* ================= DUO ================= */}
+{/* ================= TEAM (editorial) ================= */}
             <section className="relative mx-auto max-w-6xl px-4 md:px-6 pb-24">
                 <motion.div
                     variants={viewContainer}
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true, amount: 0.3 }}
-                    className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12"
+                    className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-16"
                 >
                     <motion.div variants={viewItem}>
-                        <p className="df-cta text-xs uppercase tracking-[0.2em] text-blue-300/80 mb-3">Kimlar ishlaymiz</p>
+                        <p className="df-cta text-xs uppercase tracking-[0.2em] text-blue-300/80 mb-3">Jamoa</p>
                         <h2 className="df-logo text-3xl md:text-5xl text-slate-50 leading-[1.1]">
-                            Jamoamizning <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg, #EEF1FF, #93C5FD)' }}>yarmi</span>
+                            Biz ikkimiz — <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg, #EEF1FF, #93C5FD)' }}>bitta jamoa</span>
                         </h2>
                     </motion.div>
                     <motion.p variants={viewItem} className="df-nav max-w-sm text-slate-400 leading-relaxed">
-                        Ikki profil, bitta maqsad. Har biri o‘z sohasida yetuk, lekin loyihani birgalikda olib boradi.
+                        Har ikkovimiz ham frontenddan fullstackgacha ishlaymiz — va har kuni yangi narsa o'rganamiz.
                     </motion.p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {DUO.map(({ Icon, title, desc, tags }, i) => (
-                        <motion.div
-                            key={title}
-                            initial={{ opacity: 0, y: 28 }}
+                <div className="flex flex-col">
+                    {TEAM.map(({ initials, name, year, role, accent, blurb, stack, learning, extra }, i) => (
+                        <motion.article
+                            key={name}
+                            initial={{ opacity: 0, y: 32 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, amount: 0.3 }}
-                            transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                            whileHover={{ y: -6 }}
-                            className="df-glass group relative rounded-[28px] p-8 overflow-hidden transition-shadow duration-300 hover:shadow-[0_20px_60px_-20px_rgba(59,130,246,0.35)]"
+                            viewport={{ once: true, amount: 0.2 }}
+                            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                            className={`group relative py-14 md:py-20 ${i > 0 ? 'border-t border-white/[0.07]' : ''}`}
                         >
-                            <div className="flex items-center justify-between mb-6">
-                                <span className="w-14 h-14 rounded-2xl flex items-center justify-center text-blue-300 bg-blue-500/10 border border-blue-400/20 group-hover:bg-blue-500/20 transition-colors duration-300">
-                                    <Icon className="w-7 h-7" strokeWidth={1.75} />
-                                </span>
-                                <span className="df-cta text-xs uppercase tracking-[0.2em] text-blue-300/70">0{i + 1}</span>
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
+                                {/* Identity */}
+                                <div className="lg:col-span-5">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <motion.span
+                                            whileHover={{ rotate: -6, scale: 1.05 }}
+                                            transition={{ type: 'spring', stiffness: 300, damping: 14 }}
+                                            className="w-14 h-14 rounded-full flex items-center justify-center text-white text-base df-cta font-semibold tracking-wide"
+                                            style={{ background: `linear-gradient(135deg, ${accent}, ${accent}77)` }}
+                                        >
+                                            {initials}
+                                        </motion.span>
+                                        <p className="df-cta text-xs uppercase tracking-[0.2em] text-slate-500">{role}</p>
+                                    </div>
+
+                                    <h3 className="df-logo text-4xl md:text-6xl leading-[1.02]">
+                                        <span className="transition-colors duration-300 group-hover:brightness-110" style={{ color: accent }}>
+                                            {name}
+                                        </span>
+                                    </h3>
+
+                                    <div className="mt-7 flex flex-wrap items-center gap-3">
+                                        <span
+                                            className="df-cta text-sm py-1.5 px-4 rounded-full tabular-nums"
+                                            style={{ color: accent, backgroundColor: `${accent}14`, border: `1px solid ${accent}40` }}
+                                        >
+                                            {year} yil
+                                        </span>
+                                        <span className="df-nav text-sm text-slate-500">Dualis Team a'zosi</span>
+                                    </div>
+
+                                    <p className="df-nav mt-6 text-slate-400 leading-relaxed max-w-md">{blurb}</p>
+                                </div>
+
+                                {/* Skills */}
+                                <div className="lg:col-span-7 lg:border-l lg:border-white/[0.07] lg:pl-14">
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10">
+                                        {stack.map(({ label, tags }) => (
+                                            <div key={label}>
+                                                <p className="df-cta text-[11px] uppercase tracking-[0.18em] text-slate-500 mb-5 flex items-center gap-2">
+                                                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accent }} />
+                                                    {label}
+                                                </p>
+                                                <ul className="flex flex-col gap-2.5">
+                                                    {tags.map((tag) => (
+                                                        <li key={tag} className="df-nav text-[15px] text-slate-300 flex items-center gap-2 transition-colors duration-200 group-hover:translate-x-0.5">
+                                                            <span className="w-1 h-1 rounded-full" style={{ backgroundColor: `${accent}66` }} />
+                                                            {tag}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="mt-12 pt-7 border-t border-dashed border-white/10 flex flex-wrap items-center gap-2.5">
+                                        <span className="df-cta text-[11px] uppercase tracking-[0.18em] text-slate-500 mr-1">O'rganilmoqda</span>
+                                        {learning.map((tag) => (
+                                            <span key={tag} className="df-nav text-xs text-slate-300 rounded-full border border-white/15 px-3 py-1">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                        {extra && (
+                                            <span
+                                                className="df-nav text-xs rounded-full px-3 py-1"
+                                                style={{ color: '#f6ffe9', backgroundColor: `${accent}1f`, border: `1px solid ${accent}55` }}
+                                            >
+                                                {extra}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
-                            <h3 className="df-logo text-2xl text-slate-50 mb-3">{title}</h3>
-                            <p className="df-nav text-slate-400 leading-relaxed mb-6">{desc}</p>
-                            <div className="flex flex-wrap gap-2">
-                                {tags.map((tag) => (
-                                    <span key={tag} className="df-nav text-xs text-slate-400 rounded-full border border-white/10 px-3 py-1">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-                        </motion.div>
+                        </motion.article>
                     ))}
                 </div>
             </section>

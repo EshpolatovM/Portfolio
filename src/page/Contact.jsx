@@ -35,13 +35,14 @@ const Contact = () => {
     return (
         <div className="contact-shell bg-[#040711]" ref={pageRef}>
             <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,500;1,600&family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,500;1,600&family=Outfit:wght@400;500;600;700&display=swap');
 
-        .contact-shell .df-serif { font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 500; }
-        .contact-shell .df-display { font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+        .contact-shell .df-serif,
+        .contact-shell .df-display,
+        .contact-shell .df-logo { font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 500; letter-spacing: -0.01em; }
         .contact-shell .df-nav,
-        .contact-shell .df-cta { font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-        .contact-shell .df-mono { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace; }
+        .contact-shell .df-cta,
+        .contact-shell .df-mono { font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 
         @keyframes df-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.55; } }
         .contact-shell .df-pulse-dot { animation: df-pulse 2.4s ease-in-out infinite; }

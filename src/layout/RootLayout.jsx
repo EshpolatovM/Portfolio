@@ -18,6 +18,10 @@ const RootLayout = () => {
         return () => clearTimeout(timer);
     }, []);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
     return (
         <>
             <AnimatePresence mode="wait">
