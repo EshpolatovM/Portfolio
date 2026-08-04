@@ -281,14 +281,6 @@ const Home = () => {
                         </Link>
                     </motion.div>
 
-                    <motion.div variants={item} className="mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-5">
-                        {STATS.map((stat, i) => (
-                            <div key={stat.label} className={`flex flex-col items-center ${i > 0 ? 'sm:border-l sm:border-white/[0.06] sm:pl-10' : ''}`}>
-                                <span className="df-logo text-2xl md:text-3xl text-slate-50">{stat.value}</span>
-                                <span className="df-nav mt-1 text-xs text-slate-500">{stat.label}</span>
-                            </div>
-                        ))}
-                    </motion.div>
                 </motion.div>
             </section>
 
@@ -299,24 +291,24 @@ const Home = () => {
                     initial="hidden"
                     whileInView="show"
                     viewport={{ once: true, amount: 0.2 }}
-                    className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
+                    className="grid grid-cols-4 gap-x-4 md:gap-x-6"
                 >
                     {STATS.map((stat, i) => (
                         <motion.div
                             key={stat.label}
                             variants={viewItem}
                             whileHover={{ y: -3 }}
-                            className={`text-center md:text-left ${i > 0 ? 'md:border-l md:border-white/[0.06] md:pl-6' : ''}`}
+                            className={`text-center md:text-left ${i > 0 ? 'border-l border-white/[0.06] pl-4 md:pl-6' : ''}`}
                         >
                             <motion.p
                                 whileHover={{ scale: 1.06 }}
                                 transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                                className="df-logo inline-block text-4xl md:text-5xl bg-clip-text text-transparent"
+                                className="df-logo inline-block text-2xl sm:text-3xl md:text-5xl bg-clip-text text-transparent"
                                 style={{ backgroundImage: 'linear-gradient(90deg, #EEF1FF, #93C5FD)' }}
                             >
                                 <GsapCounter value={stat.value} />
                             </motion.p>
-                            <p className="df-nav mt-2 text-sm text-slate-400">{stat.label}</p>
+                            <p className="df-nav mt-2 text-xs md:text-sm text-slate-400">{stat.label}</p>
                         </motion.div>
                     ))}
                 </motion.div>
